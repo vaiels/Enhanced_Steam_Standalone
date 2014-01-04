@@ -28,6 +28,13 @@ This project is a hackish proxy that does inject some javascript script into the
 5. When connected to the proxi-ed steam pages, the nginx daemon queries the DNS (a real one, not the hosts file), to get the IP addresses of the called domain. Then it forwards the request.
 6. When the page is returned, it perfoms the js injection, and serves the content to the client.
 
+What else you can do
+--------------------
+
+With that principle in mind, and using these software (or similar ones), you can do the following things:
+
+- Serve Enhanced Steam for a whole network (a LAN for example)
+
 FixMe
 -----
 - [IMPORTANT] The nginx sub_filter can only work with uncompressed streams, and that can be problematic, since it will cause an important waste of bandwith for Steam/Valve if this software is used too broadly.
