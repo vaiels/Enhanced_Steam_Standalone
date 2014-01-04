@@ -1,3 +1,6 @@
+**/!\ THIS SOFTWARE CAN BE USED TO SCAM (Do actions on your behalf, empty your inventory) YOU ON STEAM, BE CAREFUL IF YOU DON'T UNDERSTAND HOW IT WORKS. YOU HAVE BEEN WARNED /!\**
+
+
 Enhanced Steam Standalone
 =============
 
