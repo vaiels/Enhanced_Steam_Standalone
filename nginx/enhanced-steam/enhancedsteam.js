@@ -130,6 +130,51 @@ function main($) {
 		if (htmlstr != '') { $(".profile_item_links").append(htmlstr); }
 	}
 
+	function appdata_on_wishlist() {
+		xpath_each("//a[contains(@class,'btn_visit_store')]", function (node) {
+			var app = get_appid(node.href);
+			get_http('//store.steampowered.com/api/appdetails/?appids=' + app, function (data) {
+				var storefront_data = JSON.parse(data);
+				$.each(storefront_data, function(appid, app_data) {
+					if (app_data.success) {
+						// Add "Add to Cart" button
+						if (app_data.data.packages && app_data.data.packages[0]) {
+							var htmlstring = '<form name="add_to_cart_' + app_data.data.packages[0] + '" action="http://store.steampowered.com/cart/" method="POST">';
+							htmlstring += '<input type="hidden" name="snr" value="1_5_9__403">';
+							htmlstring += '<input type="hidden" name="action" value="add_to_cart">';
+							htmlstring += '<input type="hidden" name="subid" value="' + app_data.data.packages[0] + '">';
+							htmlstring += '</form>';
+							$(node).before('</form>' + htmlstring + '<a href="#" onclick="document.forms[\'add_to_cart_' + app_data.data.packages[0] + '\'].submit();" class="btn_visit_store">Add to Cart</a>  ');
+						}
+						
+						// Adds platform information
+						if (app_data.data.platforms) {
+							var htmlstring = "";
+							var platforms = 0;
+							if (app_data.data.platforms.windows) { htmlstring += "<span class='platform_img win'></span>"; platforms += 1; }
+							if (app_data.data.platforms.mac) { htmlstring += "<span class='platform_img mac'></span>"; platforms += 1; }
+							if (app_data.data.platforms.linux) { htmlstring += "<span class='platform_img linux'></span>"; platforms += 1; }
+
+							if (platforms > 1) { htmlstring = "<span class='platform_img steamplay'></span>" + htmlstring; }
+
+							$(node).parent().parent().parent().find(".bottom_controls").append(htmlstring);
+						}
+					}
+				});
+			});
+			
+			if ($(node).parent().parent().parent().html().match(/discount_block_inline/)) {
+				$(node).before("<div id='es_sale_type_" + app + "' style='margin-top: -10px; margin-bottom: -10px; color: #7cb8e4; display: none;'></div>");
+				$("#es_sale_type_" + app).load("http://store.steampowered.com/app/" + app + " .game_purchase_discount_countdown:first", function() {
+					if ($("#es_sale_type_" + app).html() != "") {
+						$("#es_sale_type_" + app).html($("#es_sale_type_" + app).html().replace(/\!(.+)/, "!"));
+						$("#es_sale_type_" + app).show();					
+					}
+				});
+			};	
+		});
+	}
+
 	// fixes "Image not found" in wishlist
 	function fix_wishlist_image_not_found() {
 		var items = document.getElementById("wishlist_items");
@@ -457,7 +502,9 @@ function main($) {
 			case "steamcommunity.com":
 				switch (true) {
 					case /^\/(?:id|profiles)\/.+\/wishlist/.test(window.location.pathname):
+						appdata_on_wishlist();
 						fix_wishlist_image_not_found();
+						start_highlights_and_tags();
 						break;
 
 					case /^\/(?:id|profiles)\/[^\/]+\/?$/.test(window.location.pathname):
