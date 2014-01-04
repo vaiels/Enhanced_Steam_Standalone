@@ -512,6 +512,46 @@ function main($) {
 		observer.observe(document, { subtree: true, childList: true });			
 	}
 
+	function add_custom_wallet_amount() {
+		var addfunds = $(".addfunds_area_purchase_game:first").clone();
+		$(addfunds).addClass("es_custom_funds");
+		$(addfunds).find(".btn_addtocart_content").addClass("es_custom_button");
+		$(addfunds).find("h1").text("Add custom amount");
+		//$(addfunds).find("p").text(localized_strings[language].wallet.custom_amount_text.replace("__minamount__", $(addfunds).find(".price").text().trim()));
+		$(addfunds).find("p").text("Add any amount over the minimum");
+		var currency_symbol = $(addfunds).find(".price").text().trim().match(/(?:R\$|\$|€|£|pуб)/)[0];
+		var minimum = $(addfunds).find(".price").text().trim().replace(/(?:R\$|\$|€|£|pуб)/, "");
+		var formatted_minimum = minimum;
+		switch (currency_symbol) {
+			case "€":
+			case "pуб":
+				$(addfunds).find(".price").html("<input id='es_custom_funds_amount' class='es_text_input' style='margin-top: -3px;' size=4 value='" + minimum +"'> " + currency_symbol);
+				break;
+			default:
+				$(addfunds).find(".price").html(currency_symbol + " <input id='es_custom_funds_amount' class='es_text_input' style='margin-top: -3px;' size=4 value='" + minimum +"'>");
+				break;
+		}
+		$("#game_area_purchase .addfunds_area_purchase_game:first").after(addfunds);
+		$("#es_custom_funds_amount").change(function() {
+			// Make sure two numbers are entered after the separator
+			if (!($("#es_custom_funds_amount").val().match(/(\.|\,)\d\d$/))) { $("#es_custom_funds_amount").val($("#es_custom_funds_amount").val().replace(/\D/g, "")); }
+
+			// Make sure the user entered decimals.  If not, add 00 to the end of the number to make the value correct
+			if (currency_symbol == "€" || currency_symbol == "pуб" || currency_symbol == "R$") {
+				if ($("#es_custom_funds_amount").val().indexOf(",") == -1) $("#es_custom_funds_amount").val($("#es_custom_funds_amount").val() + ",00");
+			} else {
+				if ($("#es_custom_funds_amount").val().indexOf(".") == -1) $("#es_custom_funds_amount").val($("#es_custom_funds_amount").val() + ".00");
+			}
+
+			var calculated_value = $("#es_custom_funds_amount").val().replace(/-/g, "0").replace(/\D/g, "").replace(/[^A-Za-z0-9]/g, '');		
+			minimum = minimum.replace(/-/g, "0").replace(/\D/g, "").replace(/[^A-Za-z0-9]/g, '');
+			
+			if (calculated_value <= minimum) { $("#es_custom_funds_amount").val(formatted_minimum); calculated_value = minimum; }
+			$("#es_custom_funds_amount").val($("#es_custom_funds_amount").val().replace(/[A-Za-z]/g, ''));
+			$(".es_custom_button").attr("href", "javascript:submitAddFunds( " + calculated_value + " );")
+		});
+	}
+
 	function start_highlights_and_tags(){
 		var selectors = [
 				"div.tab_row",			// Storefront rows
@@ -609,6 +649,10 @@ function main($) {
 						drm_warnings();
 						show_pricing_history(subid, "sub");
 						add_steamdb_links(subid, "sub");
+						break;
+
+					case /^\/steamaccount\/addfunds/.test(window.location.pathname):
+						add_custom_wallet_amount();
 						break;
 
 					case /^\/$/.test(window.location.pathname):
