@@ -33,6 +33,7 @@ What else you can do
 
 With that principle in mind, and using these software (or similar ones), you can do the following things:
 
+- Use Enhanced Steam with _any_ browser you want, transparently.
 - Serve Enhanced Steam for a whole network (a LAN for example)
 
 FixMe
