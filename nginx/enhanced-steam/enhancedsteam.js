@@ -119,14 +119,19 @@ function main($) {
 	function add_community_profile_links() {
 		var steamID = document.getElementsByName("abuseID")[0].value;
 		var htmlstr = '';
-		htmlstr += '<div class="profile_count_link"><a href="http://www.steamgifts.com/user/id/' + steamID + '" target="_blank"><span class="count_link_label">SteamGifts</span>&nbsp;<img src="http://www.enhancedsteam.com/firefox/ico/steamgifts.ico" width="24" height="24" border="0" /></a></div>';
-		htmlstr += '<div class="profile_count_link"><a href="http://www.steamtrades.com/user/id/' + steamID + '" target="_blank"><span class="count_link_label">SteamTrades</span>&nbsp;<img src="http://www.enhancedsteam.com/firefox/ico/steamtrades.ico" width="24" height="24" border="0" /></a></div>';
-		htmlstr += '<div class="profile_count_link"><a href="http://steamrep.com/profiles/' + steamID + '" target="_blank"><span class="count_link_label">SteamRep</span>&nbsp;<img src="http://www.enhancedsteam.com/firefox/ico/steamrep.ico" width="24" height="24" border="0" /></a></div>';
-		htmlstr += '<div class="profile_count_link"><a href="http://wastedonsteam.com/id/' + steamID + '" target="_blank"><span class="count_link_label">Wasted On Steam</span>&nbsp;<img src="http://www.enhancedsteam.com/firefox/ico/wastedonsteam.ico" width="24" height="24" border="0" /></a></div>';
-		htmlstr += '<div class="profile_count_link"><a href="http://sapi.techieanalyst.net/?page=profile&id=' + steamID + '" target="_blank"><span class="count_link_label">sAPI</span>&nbsp;<img src="http://www.enhancedsteam.com/firefox/ico/sapi.ico" width="24" height="24" border="0" /></a></div>';
-		htmlstr += '<div class="profile_count_link"><a href="http://backpack.tf/profiles/' + steamID + '" target="_blank"><span class="count_link_label">backpack.tf</span>&nbsp;<img src="http://www.enhancedsteam.com/firefox/ico/backpacktf.ico" width="24" height="24" border="0" /></a></div>';
-		htmlstr += '<div class="profile_count_link"><a href="http://www.achievementstats.com/index.php?action=profile&playerId=' + steamID + '" target="_blank"><span class="count_link_label">Achievement Stats</span>&nbsp;<img src="http://www.enhancedsteam.com/firefox/ico/achievementstats.ico" width="24" height="24" border="0" /></a></div>';
-
+		htmlstr += '<div class="profile_count_link"><a href="http://steamrep.com/profiles/' + steamID + '" target="_blank"><span class="count_link_label">SteamRep</span>&nbsp;<span class="profile_count_link_total">';
+		htmlstr += '<img src="http://steamcommunity.com/es-images/ico/steamrep.png"></span></a></div>';	
+		htmlstr += '<div class="profile_count_link"><a href="http://steamdb.info/calculator/?player=' + steamID + '" target="_blank"><span class="count_link_label">SteamDB</span>&nbsp;<span class="profile_count_link_total">';
+		htmlstr += '<img src="http://steamcommunity.com/es-images/ico/steamdb.png"></span></a></div>';	
+		htmlstr += '<div class="profile_count_link"><a href="http://www.steamtrades.com/user/id/' + steamID + '" target="_blank"><span class="count_link_label">SteamTrades</span>&nbsp;<span class="profile_count_link_total">';
+		htmlstr += '<img src="http://steamcommunity.com/es-images/ico/steamtrades.png"></span></a></div>';	
+		htmlstr += '<div class="profile_count_link"><a href="http://www.steamgifts.com/user/id/' + steamID + '" target="_blank"><span class="count_link_label">SteamGifts</span>&nbsp;<span class="profile_count_link_total">';
+		htmlstr += '<img src="http://steamcommunity.com/es-images/ico/steamgifts.png"></span></a></div>';	
+		htmlstr += '<div class="profile_count_link"><a href="http://www.achievementstats.com/index.php?action=profile&playerId=' + steamID + '" target="_blank"><span class="count_link_label">Achievement Stats</span>&nbsp;<span class="profile_count_link_total">';
+		htmlstr += '<img src="http://steamcommunity.com/es-images/ico/achievementstats.png"></span></a></div>';	
+		htmlstr += '<div class="profile_count_link"><a href="http://backpack.tf/profiles/' + steamID + '" target="_blank"><span class="count_link_label">Backpack.tf</span>&nbsp;<span class="profile_count_link_total">';
+		htmlstr += '<img src="http://steamcommunity.com/es-images/ico/backpacktf.png"></span></a></div>';
+		
 		if (htmlstr != '') { $(".profile_item_links").append(htmlstr); }
 	}
 
@@ -331,13 +336,13 @@ function main($) {
 				$(".apphub_OtherSiteInfo").append('<a href="http://steamdb.info/app/' + appid + '/" class="btn_darkblue_white_innerfade btn_medium" target="_blank"><span>Steam Database</span>');
 				break;
 			case "gamegroup":
-				$('#rightActionBlock' ).append('<div class="actionItemIcon"><img src="http://www.enhancedsteam.com/firefox/steamdb.png" width="16" height="16" alt=""></div><a class="linkActionMinor" target="_blank" href="http://steamdb.info/app/' + appid + '/">View In Steam Database</a>');
+				$('#rightActionBlock' ).append('<div class="actionItemIcon"><img src="http://store.steampowered.com/es-images/steamdb.png" width="16" height="16" alt=""></div><a class="linkActionMinor" target="_blank" href="http://steamdb.info/app/' + appid + '/">View In Steam Database</a>');
 				break;
 			case "app":
-				$('#demo_block').find('.block_content_inner').find('.share').before('<div class="demo_area_button"><a class="game_area_wishlist_btn" target="_blank" href="http://steamdb.info/app/' + appid + '/" style="background-image:url(http://www.enhancedsteam.com/firefox/steamdb_store.png)">View In Steam Database</a></div>');
+				$('#demo_block').find('.block_content_inner').find('.share').before('<div class="demo_area_button"><a class="game_area_wishlist_btn" target="_blank" href="http://steamdb.info/app/' + appid + '/" style="background-image:url(http://store.steampowered.com/es-images/steamdb_store.png)">View In Steam Database</a></div>');
 				break;
 			case "sub":	
-				$(".share").before('<a class="game_area_wishlist_btn" target="_blank" href="http://steamdb.info/sub/' + appid + '/" style="background-image:url(http://www.enhancedsteam.com/firefox/steamdb_store.png)">View In Steam Database</a>');
+				$(".share").before('<a class="game_area_wishlist_btn" target="_blank" href="http://steamdb.info/sub/' + appid + '/" style="background-image:url(http://store.steampowered.com/es-images/steamdb_store.png)">View In Steam Database</a>');
 				break;
 		}
 	}
@@ -399,49 +404,49 @@ function main($) {
 		
 		if (gfwl) {
 			var drm = document.getElementById('game_area_purchase'); 
-			drm.insertAdjacentHTML('beforebegin', '<div class="game_area_already_owned" style="background-image: url( http://www.enhancedsteam.com/firefox/game_area_warning.png );">Warning: This title uses 3rd party DRM (Games for Windows Live)</div>');
+			drm.insertAdjacentHTML('beforebegin', '<div class="game_area_already_owned" style="background-image: url( http://store.steampowered.com/es-images/game_area_warning.png );">Warning: This title uses 3rd party DRM (Games for Windows Live)</div>');
 			otherdrm = false;
 		}
 		
 		if (uplay) {
 			var drm = document.getElementById('game_area_purchase'); 
-			drm.insertAdjacentHTML('beforebegin', '<div class="game_area_already_owned" style="background-image: url( http://www.enhancedsteam.com/firefox/game_area_warning.png );">Warning: This title uses 3rd party DRM (Ubisoft Uplay)</div>');
+			drm.insertAdjacentHTML('beforebegin', '<div class="game_area_already_owned" style="background-image: url( http://store.steampowered.com/es-images/game_area_warning.png );">Warning: This title uses 3rd party DRM (Ubisoft Uplay)</div>');
 			otherdrm = false;
 		}
 		
 		if (securom) {
 			var drm = document.getElementById('game_area_purchase'); 
-			drm.insertAdjacentHTML('beforebegin', '<div class="game_area_already_owned" style="background-image: url( http://www.enhancedsteam.com/firefox/game_area_warning.png );">Warning: This title uses 3rd party DRM (SecuROM)</div>');
+			drm.insertAdjacentHTML('beforebegin', '<div class="game_area_already_owned" style="background-image: url( http://store.steampowered.com/es-images/game_area_warning.png );">Warning: This title uses 3rd party DRM (SecuROM)</div>');
 			otherdrm = false;
 		}
 		
 		if (tages) {
 			var drm = document.getElementById('game_area_purchase'); 
-			drm.insertAdjacentHTML('beforebegin', '<div class="game_area_already_owned" style="background-image: url( http://www.enhancedsteam.com/firefox/game_area_warning.png );">Warning: This title uses 3rd party DRM (Tages)</div>');
+			drm.insertAdjacentHTML('beforebegin', '<div class="game_area_already_owned" style="background-image: url( http://store.steampowered.com/es-images/game_area_warning.png );">Warning: This title uses 3rd party DRM (Tages)</div>');
 			otherdrm = false;
 		}
 		
 		if (stardock) {
 			var drm = document.getElementById('game_area_purchase'); 
-			drm.insertAdjacentHTML('beforebegin', '<div class="game_area_already_owned" style="background-image: url( http://www.enhancedsteam.com/firefox/game_area_warning.png );">Warning: This title uses 3rd party DRM (Stardock Account Required)</div>');
+			drm.insertAdjacentHTML('beforebegin', '<div class="game_area_already_owned" style="background-image: url( http://store.steampowered.com/es-images/game_area_warning.png );">Warning: This title uses 3rd party DRM (Stardock Account Required)</div>');
 			otherdrm = false;
 		}
 		
 		if (rockstar) {
 			var drm = document.getElementById('game_area_purchase'); 
-			drm.insertAdjacentHTML('beforebegin', '<div class="game_area_already_owned" style="background-image: url( http://www.enhancedsteam.com/firefox/game_area_warning.png );">Warning: This title uses 3rd party DRM (Rockstar Social Club)</div>');
+			drm.insertAdjacentHTML('beforebegin', '<div class="game_area_already_owned" style="background-image: url( http://store.steampowered.com/es-images/game_area_warning.png );">Warning: This title uses 3rd party DRM (Rockstar Social Club)</div>');
 			otherdrm = false;
 		}
 		
 		if (kalypso) {
 			var drm = document.getElementById('game_area_purchase'); 
-			drm.insertAdjacentHTML('beforebegin', '<div class="game_area_already_owned" style="background-image: url( http://www.enhancedsteam.com/firefox/game_area_warning.png );">Warning: This title uses 3rd party DRM (Kalypso Launcher)</div>');
+			drm.insertAdjacentHTML('beforebegin', '<div class="game_area_already_owned" style="background-image: url( http://store.steampowered.com/es-images/game_area_warning.png );">Warning: This title uses 3rd party DRM (Kalypso Launcher)</div>');
 			otherdrm = false;
 		}
 		
 		if (otherdrm) {
 			var drm = document.getElementById('game_area_purchase'); 
-			drm.insertAdjacentHTML('beforebegin', '<div class="game_area_already_owned" style="background-image: url( http://www.enhancedsteam.com/firefox/game_area_warning.png );">Warning: This title uses 3rd party DRM</div>');
+			drm.insertAdjacentHTML('beforebegin', '<div class="game_area_already_owned" style="background-image: url( http://store.steampowered.com/es-images/game_area_warning.png );">Warning: This title uses 3rd party DRM</div>');
 		}
 	}
 
