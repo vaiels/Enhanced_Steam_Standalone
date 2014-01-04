@@ -573,22 +573,45 @@ function main($) {
 		}
 	}
 	
-	function bind_ajax_content_highlighting () {
+	function bind_ajax_content_highlighting() {
 		// checks content loaded via AJAX
 		var observer = new MutationObserver(function(mutations) {
 			mutations.forEach(function(mutation) {
 				for (var i = 0; i < mutation.addedNodes.length; i++) {
 					var node = mutation.addedNodes[i];
 					// Check the node is what we want, and not some unrelated DOM change.
-					if (node.classList && node.classList.contains("tab_row")) start_highlighting_node(node);
-					if (node.id == "search_result_container") start_highlights_and_tags();					
+					if (node.classList && node.classList.contains("tab_row")) {					
+						start_highlighting_node(node);
+						check_early_access(node, "ea_sm_120.png", 0);
+					}
+
+					if (node.id == "search_result_container") {
+						start_highlights_and_tags();
+						add_overlay();
+					}
+
+					if ($(node).children('div')[0] && $(node).children('div')[0].classList.contains("blotter_day")) {
+						add_overlay();
+					}
 					if (node.classList && node.classList.contains("match")) start_highlighting_node(node);
-					if (node.classList && node.classList.contains("search_result_row")) start_highlighting_node(node);		
+					if (node.classList && node.classList.contains("search_result_row")) start_highlighting_node(node);
 					if ($(node).parent()[0] && $(node).parent()[0].classList.contains("search_result_row")) start_highlighting_node($(node).parent()[0]);
 				}
 			});
 		});
-		observer.observe(document, { subtree: true, childList: true });			
+		observer.observe(document, { subtree: true, childList: true });
+	}
+
+	function start_highlighting_node(node) {
+		var appid = get_appid(node.href || $(node).find("a")[0].href) || get_appid_wishlist(node.id);
+		if (appid) {
+			get_app_details(appid, node);			
+		} else {
+			var subid = get_subid(node.href || $(node).find("a")[0].href);
+			if (subid) {
+				get_sub_details (subid, node);
+			}
+		}
 	}
 
 	function add_custom_wallet_amount() {
@@ -667,6 +690,39 @@ function main($) {
 				}
 				
 				highlight_app(appid, node);
+			});
+		});
+	}
+
+	function get_sub_details(subid, node) {
+		if (getValue(subid + "owned")) { highlight_owned(node); return; }
+		get_http('//store.steampowered.com/api/packagedetails/?packageids=' + subid, function (data) {
+			var pack_data = JSON.parse(data);
+			$.each(pack_data, function(subid, sub_data) {
+				if (sub_data.success) {
+					var app_ids = [];
+					var owned = [];
+					if (sub_data.data.apps) {
+						sub_data.data.apps.forEach(function(app) {
+							app_ids.push (app.id);
+							get_http('//store.steampowered.com/api/appuserdetails/?appids=' + app.id, function (data2) {
+								var storefront_data = JSON.parse(data2);
+								$.each(storefront_data, function(appid, app_data) {
+									if (app_data.success) {
+										if (app_data.data.is_owned === true) {
+											owned.push(appid);
+										}
+									}
+								});
+
+								if (owned.length == app_ids.length) {
+									setValue(subid + "owned", true);
+									highlight_app(subid, node);
+								}
+							});
+						});
+					}
+				}
 			});
 		});
 	}
