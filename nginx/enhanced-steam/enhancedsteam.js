@@ -451,47 +451,27 @@ function main($) {
 	}
 
 	function add_carousel_descriptions() {
-		var capsule_appids = $.map($(".cluster_capsule"), function(obj){return get_appid(obj.href);});
-
-		get_http("//store.steampowered.com/api/appdetails/?appids=" + capsule_appids.join(","), function(txt) {
-			
-			var description_height_to_add = 62;  // 60 is good for 4 lines; most strings are 2 or 3 lines than this.
+		if ($(".main_cluster_content").length > 0) {
+			var description_height_to_add = 62;
 			$(".main_cluster_content").css("height", parseInt($(".main_cluster_content").css("height").replace("px", ""), 10) + description_height_to_add + "px");
-
-			var data = JSON.parse(txt);
-
+			
+			
 			$.each($(".cluster_capsule"), function(i, _obj) {
 				var appid = get_appid(_obj.href),
 					$desc = $(_obj).find(".main_cap_content"),
 					$desc_content = $("<p></p>");
-					
-				if (data[appid] !== undefined) {
-					if (data[appid].success) {					
-						$desc.css("height", parseInt($desc.css("height").replace("px", ""), 10) + description_height_to_add + "px");
-						$desc.parent().css("height", parseInt($desc.parent().css("height").replace("px", ""), 10) + description_height_to_add + "px");
-
-						var raw_string = $(data[appid].data.about_the_game).text();  // jQuery into DOM then get only text; no html pls.
-
-						// Split the string into sentences (we only want the first two).
-						// Replace delimiters with themselves and a unique string to split upon, because we want to include the delimiter once split.
-						raw_string = raw_string.replace(/([\.\!\?])/g, "$1 Wow_so_unique");
-						var string_sentences = raw_string.split("Wow_so_unique"),
-							display_string;
-
-						if (string_sentences.length >= 2) {
-							display_string = string_sentences[0] + string_sentences[1];
-						}
-						else {
-							display_string = raw_string;
-						}
-
-						$desc_content.html(display_string);
-
-						$desc.append($desc_content);
+				
+				$desc.css("height", parseInt($desc.css("height").replace("px", ""), 10) + description_height_to_add + "px");
+				$desc.parent().css("height", parseInt($desc.parent().css("height").replace("px", ""), 10) + description_height_to_add + "px");
+				
+				get_http('http://store.steampowered.com/app/' + appid, function(txt) {
+					var desc = txt.match(/textarea name="w_text" placeholder="(.+)" maxlength/);
+					if (desc) {
+						$desc.append(desc[1]);
 					}
-				}    
+				});
 			});
-		});
+		}
 	}
 
 	function check_early_access(node, image_name, image_left, selector_modifier) {	
